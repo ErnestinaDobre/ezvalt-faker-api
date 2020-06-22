@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h2>Users</h2>
+    <ul id="lista-users"></ul>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody id="corp-tabel-users">
+
+        </tbody>
+    </table>
+    <script>
+        class User {
+            constructor(id, name, username, email) {
+                this.id = id;
+                this.name = name;
+                this.username = username;
+                this.email = email;
+
+            }
+
+            // TODO: constructor
+            showAsList() {
+                // TODO: 
+                return `<li>${this.id}</li>
+                        <ul>
+                        <li>${this.name}</li>
+                        <li>${this.username}</li>
+                        <li>${this.email}</li>
+                        </ul>`
+            }
+
+            showAsRow() {
+                // TODO: ...
+                return `<td>${this.id}</td>
+                        <td>${this.name}</td>
+                        <td>${this.username}</td>
+                        <td>${this.email}</td>`
+            }
+
+        }
+
+        // TODO: un promise care incarca datele despre users de la typicode
+        // id name username email
+        // TODO: clasa User - cu field-urile id name username email
+        // TODO: in clasa user vrem sa avem metode pentru afisare in lista si afisare in tabel
+        //Preluarea datelor: datele vor fi introduse in array de obiecte clasa
+        
+        let listaUsers = document.getElementById('lista-users');
+        let tabelUsers = document.getElementById('corp-tabel-users');
+
+        let promisiuneUsers = new Promise(function (resolve, reject) {
+            $.ajax({
+                url: 'http://127.0.0.1:1337/',
+                success: function (datele) {
+                    console.log(datele);
+                    let arr = [];
+                    for (let usr of datele.users) {
+                        arr.push(new User(usr.id, usr.name, usr.username, usr.email))
+
+                    };
+                    resolve(arr);
+                    console.log('Functioneaza datele!');
+                    console.log(arr);
+                }
+
+            })
+        });
+
+        promisiuneUsers.then(function (users) {
+
+            for (let u of users) {
+                listaUsers.innerHTML += u.showAsList();
+                tabelUsers.innerHTML += u.showAsRow();
+            };
+
+        });
+    </script>
+</body>
+
+</html>
